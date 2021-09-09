@@ -1,7 +1,10 @@
 const express = require('express')
+var morgan = require('morgan')
+
 const app = express()
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 
 let persons = [
@@ -62,8 +65,9 @@ const generateID = (max) => Math.floor(Math.random() * max)
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  
+
   const personExists = (persons.filter(person => person.name === body.name).length > 1) ? true : false
+
   if (!body.name || !body.number) {
     return response.status(404).json({
       error: 'content missing'
