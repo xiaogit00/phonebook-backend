@@ -4,7 +4,10 @@ var morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
-app.use(morgan('tiny'))
+morgan.token('data', (req, res) => JSON.stringify(req.body))
+
+app.use(morgan(':method :url :response-time :data'))
+
 
 
 let persons = [
@@ -57,7 +60,6 @@ app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
 
   persons = persons.filter(person => person.id !== id)
-console.log(persons)
   response.status(204).end()
 })
 
@@ -83,7 +85,6 @@ app.post('/api/persons', (request, response) => {
       number: body.number
     }
     persons = persons.concat(person)
-    console.log(persons)
     response.json(person)
   }
 
